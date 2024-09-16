@@ -21,7 +21,7 @@ func (pc *PresensiController) PresensiMasuk(ctx *gin.Context) {
 
 	ctx.ShouldBindJSON(&payload)
 
-	users, exists := ctx.Get("nip")
+	user, exists := ctx.Get("user")
 
 	if !exists {
 		ctx.JSON(401, gin.H{
@@ -30,10 +30,11 @@ func (pc *PresensiController) PresensiMasuk(ctx *gin.Context) {
 		})
 	}
 
-	payload.NIP = users.(string)
+	payload.UserID = user.(models.User).ID
 
 	newPresensi := models.Presensi{
-		NIP: payload.NIP,
+		UserID: payload.UserID,
+		NIP: user.(models.User).NIP,
 		JamMasuk: time.Now(),
 		Status: "Tepat Waktu",
 	}

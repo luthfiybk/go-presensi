@@ -20,13 +20,12 @@ func RequireAuth(ctx *gin.Context) {
 			"status": 401,
 			"message": "Unauthorized",
 		})
-		ctx.AbortWithStatus(http.StatusUnauthorized)
 		return
 	}
 
 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
-			return nil, fmt.Errorf("There was an error")
+			return nil, fmt.Errorf("there was an error")
 		}
 
 		return []byte(os.Getenv("JWT_SECRET")), nil
@@ -38,20 +37,20 @@ func RequireAuth(ctx *gin.Context) {
 				"status": 401,
 				"message": "Token expired",
 			})
-			ctx.AbortWithStatus(http.StatusUnauthorized)
+			
 			return
 		}
 
 		var user models.User
 
-		cfg.DB.Where(&user, claims["nip"].(string))
+		cfg.DB.Where(&user, int(claims["id"].(float64)))
 
 		if user.ID == 0 {
 			ctx.JSON(404, gin.H{
 				"status": 404,
 				"message": "User not found",
 			})
-			ctx.AbortWithStatus(http.StatusNotFound)
+			
 			return
 		}
 

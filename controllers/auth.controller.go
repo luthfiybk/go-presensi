@@ -70,6 +70,12 @@ func (ac *AuthController) Login(ctx *gin.Context) {
 
 	ctx.SetSameSite(http.SameSiteLaxMode)
 	ctx.SetCookie("Authorization", tokenString, 3600, "", "localhost", false, true)
+
+	ctx.JSON(http.StatusOK, gin.H{
+		"status": 200,
+		"message": "Login success",
+		"data": token.Claims,
+	})
 }
 
 func (ac *AuthController) Create(ctx *gin.Context) {
@@ -114,5 +120,14 @@ func (ac *AuthController) Create(ctx *gin.Context) {
 		"status": 201,
 		"message": "User created successfully",
 		"data": newUser,
+	})
+}
+
+func (ac *AuthController) Logout(ctx *gin.Context) {
+	ctx.SetSameSite(http.SameSiteLaxMode)
+	ctx.SetCookie("Authorization", "", -1, "", "localhost", false, true)
+	ctx.JSON(200, gin.H{
+		"status": 200,
+		"message": "Logout success",
 	})
 }

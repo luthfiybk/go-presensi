@@ -6,9 +6,9 @@ type User struct {
 	gorm.Model
 	NIP 		string 		`json:"nip" gorm:"unique"`
 	Name 		string 		`json:"name"`
-	Email 		string 		`json:"email"`
+	Email 		string 		`json:"email" gorm:"unique"`
 	Password 	string 		`json:"password"`
-	Presensi 	[]Presensi
+	Presensis 	[]Presensi
 }
 
 type CreateUserInput struct {
